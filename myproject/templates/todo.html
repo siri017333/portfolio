@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f6f8;
+            color: #333;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            color: #2c3e50;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            padding: 10px 15px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            border: none;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        ul {
+            max-width: 600px;
+            margin: 0 auto;
+            list-style: none;
+        }
+
+        .task {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .task:hover {
+            transform: translateY(-2px);
+        }
+
+        .task span {
+            font-size: 16px;
+        }
+
+        .done {
+            text-decoration: line-through;
+            color: #7f8c8d;
+        }
+
+        .task a {
+            text-decoration: none;
+            color: #e74c3c;
+            margin-left: 10px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .task a:hover {
+            color: #c0392b;
+        }
+
+        li.no-tasks {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>📝 My To-Do List</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Add a new task..." required>
+        <button type="submit">Add</button>
+    </form>
+    <ul>
+        {% for task in tasks %}
+        <li class="task">
+            <span class="{% if task.completed %}done{% endif %}">{{ task.title }}</span>
+            <div>
+                <a href="{% url 'toggle_task' task.id %}">Toggle</a>
+                <a href="{% url 'delete_task' task.id %}">Delete</a>
+            </div>
+        </li>
+        {% empty %}
+        <li class="no-tasks">No tasks yet. Start by adding one above! 🚀</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
